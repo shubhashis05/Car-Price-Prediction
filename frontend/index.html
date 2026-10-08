@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Price Predictor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="container">
+    <header class="page-header">
+      <p class="eyebrow">CAR PRICE PREDICTOR</p>
+      <h1>Estimate your car's value</h1>
+      <p class="intro">Enter the car details below to get an estimated selling price.</p>
+    </header>
+
+    {% if error %}
+    <p class="error" role="alert">{{ error }}</p>
+    {% endif %}
+
+    <form class="car-form" action="{{ url_for('predict') }}" method="post">
+      <div class="form-grid">
+        <div class="field">
+          <label for="name">Car name</label>
+          <input id="name" name="name" type="text" list="car-names" placeholder="e.g. Maruti Swift" required>
+          <datalist id="car-names">
+            {% for car_name in car_names %}
+            <option value="{{ car_name }}">
+            {% endfor %}
+          </datalist>
+        </div>
+
+        <div class="field">
+          <label for="year">Year</label>
+          <input id="year" name="year" type="number" min="1983" max="2020" placeholder="e.g. 2018" required>
+        </div>
+
+        <div class="field">
+          <label for="km_driven">Kilometres driven</label>
+          <input id="km_driven" name="km_driven" type="number" min="0" placeholder="e.g. 45000" required>
+        </div>
+
+        <div class="field">
+          <label for="fuel">Fuel</label>
+          <select id="fuel" name="fuel" required>
+            <option value="" disabled selected>Select fuel type</option>
+            <option value="CNG">CNG</option>
+            <option value="Diesel">Diesel</option>
+            <option value="LPG">LPG</option>
+            <option value="Petrol">Petrol</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="seller_type">Seller type</label>
+          <select id="seller_type" name="seller_type" required>
+            <option value="" disabled selected>Select seller type</option>
+            <option value="Dealer">Dealer</option>
+            <option value="Individual">Individual</option>
+            <option value="Trustmark Dealer">Trustmark Dealer</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="transmission">Transmission</label>
+          <select id="transmission" name="transmission" required>
+            <option value="" disabled selected>Select transmission</option>
+            <option value="Automatic">Automatic</option>
+            <option value="Manual">Manual</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="owner">Owner</label>
+          <select id="owner" name="owner" required>
+            <option value="" disabled selected>Select owner history</option>
+            <option value="First Owner">First Owner</option>
+            <option value="Second Owner">Second Owner</option>
+            <option value="Third Owner">Third Owner</option>
+            <option value="Fourth &amp; Above Owner">Fourth &amp; Above Owner</option>
+            <option value="Test Drive Car">Test Drive Car</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="mileage">Mileage <span>(km/l or km/kg)</span></label>
+          <input id="mileage" name="mileage" type="number" min="0" step="any" placeholder="e.g. 21.4" required>
+        </div>
+
+        <div class="field">
+          <label for="engine">Engine <span>(cc)</span></label>
+          <input id="engine" name="engine" type="number" min="0" placeholder="e.g. 1248" required>
+        </div>
+
+        <div class="field">
+          <label for="max_power">Max power <span>(bhp)</span></label>
+          <input id="max_power" name="max_power" type="number" min="0" step="any" placeholder="e.g. 88.5" required>
+        </div>
+
+        <div class="field">
+          <label for="seats">Seats</label>
+          <input id="seats" name="seats" type="number" min="1" step="1" placeholder="e.g. 5" required>
+        </div>
+      </div>
+
+      <button type="submit">Predict selling price</button>
+    </form>
+
+    {% if selling_price is defined and selling_price is not none %}
+    <section class="result" aria-live="polite">
+      <p class="result-label">Estimated selling price</p>
+      <p class="result-value">{{ selling_price }}</p>
+    </section>
+    {% endif %}
+  </main>
+</body>
+</html>
